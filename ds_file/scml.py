@@ -150,7 +150,8 @@ class Scml(ElementTree):
 
         folders = self.findall("folder")
         for folder in folders:
-            print("build symbol: " + (folder_name := folder.get("name")))
+            print("build symbol: " + (folder_name := folder.get("name").lower()))
+
             files = [file for file in folder.findall("file") if file.get("name").find("(missing)") == -1]
             if files:
                 build_data["Symbol"][folder_name] = []
