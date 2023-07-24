@@ -280,7 +280,8 @@ class Scml(ElementTree):
                     bounding_rectangle = {"x1": float("-inf"), "x2": float("-inf"), "y1": float("-inf"), "y2": float("-inf")}
                     Frame = {"elements": []}
                     for timeline_idx, timeline in enumerate(valid_timelines):
-                        keys = timeline.findall("key")[:-1]
+                        keys = timeline.findall("key")
+                        keys = keys[:-1] if len(keys) > 1 else keys
                         key_count = len(keys)
 
                         should_export = True
