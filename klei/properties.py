@@ -6,6 +6,7 @@ ImageProperties = {
     "cookbook": {
         "width" : 256,
         "height" : 256,
+        "prefix": "cookbook_",
     },
     "road" : {
         "border" : 4,

@@ -163,7 +163,7 @@ def Atlas(images, out_name, max_size=2048, scale_factor=1, force_square=False) -
 
     return atlases
 
-def GenerateXMLTree(texture_filename, texture_size, bboxes, offset_amount=None) ->ElementTree:
+def GenerateXMLTree(texture_filename, texture_size, bboxes, offset_amount=None, element_prefix="") ->ElementTree:
     root = Element("Atlas")
     tex_elem = SubElement(root, "Texture")
     tex_elem.set("filename", os.path.basename(texture_filename))
@@ -178,7 +178,7 @@ def GenerateXMLTree(texture_filename, texture_size, bboxes, offset_amount=None) 
 
     for name, bbox in bboxes.items():
         elem = SubElement(elem_root, "Element")
-        elem.set("name", name)
+        elem.set("name", element_prefix + name)
 
         u1 = Clamp(0.0, 1.0, bbox.x / float(texture_size[0]) + border_uv_offset[0])
         v1 = Clamp(0.0, 1.0, 1.0 - (bbox.y + bbox.h) / float(texture_size[1]) + border_uv_offset[1])

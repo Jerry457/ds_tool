@@ -22,6 +22,7 @@ def AtlasImages(image_dir):
 
         size = None
         border_size = 0
+        element_prefix = ""
 
         for propertie in ImageProperties:
             if dir_name.find(propertie) != -1:
@@ -29,6 +30,7 @@ def AtlasImages(image_dir):
                 width = ImageProperties[propertie].get("width", None)
                 height = ImageProperties[propertie].get("height", None)
                 border_size = ImageProperties[propertie].get("border", 0)
+                element_prefix = ImageProperties[propertie].get("prefix", "")
 
                 if width is not None and height is not None:
                     size = (width, height)
@@ -49,7 +51,7 @@ def AtlasImages(image_dir):
         mip.im.save(os.path.join(temp_path, dir_name + ".png"))
         png_to_tex(os.path.join(temp_path, dir_name + ".png"), dest_filename)
 
-        xml = atlas_image.GenerateXMLTree(dest_filename, mip.im.size, page.bboxes, border_size + 0.5)
+        xml = atlas_image.GenerateXMLTree(dest_filename, mip.im.size, page.bboxes, border_size + 0.5,  element_prefix=element_prefix)
         xml.write(xml_filename)
 
 
