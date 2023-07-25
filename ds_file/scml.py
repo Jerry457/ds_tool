@@ -211,7 +211,7 @@ class Scml(ElementTree):
                     mainline_timeline_key_object = animation.find(f"timeline[@id='{timeline_mainline_object_ref.get('timeline', '0')}']/key[@id='{timeline_mainline_object_ref.get('key', '0')}']/object")
                     mainline_file = scml_root.find(f"folder[@id='{mainline_timeline_key_object.get('folder', '0')}']/file[@id='{mainline_timeline_key_object.get('file', '0')}']")
 
-                    for key in keys[:-1]:
+                    for key in keys:
                         key_object = key.find("object")
                         key_file = scml_root.find(f"folder[@id='{key_object.get('folder', '0')}']/file[@id='{key_object.get('file', '0')}']")
 
@@ -294,7 +294,7 @@ class Scml(ElementTree):
                             continue
 
                         start_key, end_key, start_time, end_time, blend = get_key_blend(keys, anim_length, frame_num, looping)
-                        if end_time - start_time >= 1.5 * frame_duration:
+                        if end_time - start_time >= 1.5 * frame_duration and key_count > 1:
                             continue
 
                         start_key_object = start_key.find("object")
