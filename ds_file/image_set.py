@@ -23,13 +23,17 @@ def AtlasImages(image_dir):
         size = None
         border_size = 0
 
-        if dir_name in ImageProperties:
-            width = ImageProperties[dir_name].get("width", None)
-            height = ImageProperties[dir_name].get("height", None)
-            border_size = ImageProperties[dir_name].get("border", 0)
+        for propertie in ImageProperties:
+            if dir_name.find(propertie) != -1:
 
-            if width is not None and height is not None:
-                size = (width, height)
+                width = ImageProperties[propertie].get("width", None)
+                height = ImageProperties[propertie].get("height", None)
+                border_size = ImageProperties[propertie].get("border", 0)
+
+                if width is not None and height is not None:
+                    size = (width, height)
+
+                break
 
         images = []
         for image_path in images_paths:
