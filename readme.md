@@ -24,7 +24,8 @@
    png转tex使用klei的TextureConverter: https://github.com/kleientertainment/ds_mod_tools  
 4. 传入文件夹(按下面顺序查找文件夹)：  
     (1) 有tex文件和对应xml文件, 自动拆图  
-    (2) 有png文件, 自动合并成一张图并生成xml(atlas名为文件夹名)  
+    (2) 有png文件, 自动合并成一张图并生成xml(atlas名为文件夹名)
+           如果atals名中有inventoryimages, 自动将图片调整成64×64, 有cookbook, 自动调整为512×512，可在keli/properties.py里自行添加  
     (3) 有dyn文件, 自动转换成压缩包  
     (4) 有scml文件, 自动打包(build名位scml文件名), 打包时输入图片的缩放(默认1)  
     (5) 文件夹里有zip文件, 自动合并zip文件并转换成scml(输出的build名位文件夹名) 修改自: https://github.com/nsimplex/ktools  
