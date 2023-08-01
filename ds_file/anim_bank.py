@@ -169,8 +169,9 @@ class AnimBank():
             entity = SubElement(scml, "entity", id=str(bank_idx), name=bank_name)
             for anim_idx, (anim_name, anim) in enumerate(bank.items()):
                 frame_duration = 1000 // anim["framerate"]
+                length = frame_duration * max(1, anim["numframes"] - 1)
 
-                animation = SubElement(entity, "animation", id=str(anim_idx), name=anim_name, length=str(frame_duration * (anim["numframes"])))
+                animation = SubElement(entity, "animation", id=str(anim_idx), name=anim_name, length=str(length))
 
                 mainline = SubElement(animation, "mainline")
 
@@ -180,7 +181,7 @@ class AnimBank():
                     element_name_num = {}
                     element_names = []
                     for element_idx, element in enumerate(frame["elements"]):
-                        element_name_num[element_name] = element_name_num[element_name] + 1 if (element_name := element["name"]) in element_name_num else 0
+                        element_name_num[element_name] = element_name_num[element_name] + 1 if (element_name := (element["name"] + str(element["frame"]))) in element_name_num else 0
                         element_names.append([f"{element_name}_{element_name_num[element_name]:03d}", element["layername"]])
 
                     index = -1
@@ -215,12 +216,9 @@ class AnimBank():
                     element_names = []
 
                     mainline_key = SubElement(mainline, "key", id=str(frame_idx), time=str(frame_idx * frame_duration))
-                    end_mainlinee_key = None
-                    if frame_idx == (frame_len := len(anim["frames"])) - 1:
-                        end_mainlinee_key = SubElement(mainline, "key", id=str(frame_len), time=str(frame_len * frame_duration))
 
                     for element_idx, element in enumerate(frame["elements"]):
-                        element_name_num[_element_name] = element_name_num[_element_name] + 1 if (_element_name := element["name"]) in element_name_num else 0
+                        element_name_num[_element_name] = element_name_num[_element_name] + 1 if (_element_name := (element["name"] + str(element["frame"]))) in element_name_num else 0
                         element_name = f"{_element_name}_{element_name_num[_element_name]:03d}"
 
                         m = Matrix3()
@@ -238,13 +236,9 @@ class AnimBank():
                         angle = math.degrees(last["angle"] if last["angle"] >= 0 else last["angle"] + 2 * math.pi)
 
                         key = SubElement(timelines[element_name], "key", id=str(frame_idx), time=str(frame_idx * frame_duration), spin=str(last["spin"]))
-                        SubElement(key, "object", folder=scml.find(f"folder[@name='{_element_name}']").get("id"), file=str(element["frame"]), x=str(trans[0]), y=str(-trans[1]), scale_x=str(last["scale_x"]), scale_y=str(last["scale_y"]), angle=str(angle))
+                        SubElement(key, "object", folder=scml.find(f"folder[@name='{element['name']}']").get("id"), file=str(element["frame"]), x=str(trans[0]), y=str(-trans[1]), scale_x=str(last["scale_x"]), scale_y=str(last["scale_y"]), angle=str(angle))
                         SubElement(mainline_key, "object_ref", id=str(element_idx), timeline=timelines[element_name].get("id"), key=str(frame_idx), z_index=str(len(frame["elements"]) - 1 - element_idx))
 
-                        if end_mainlinee_key is not None:
-                            end_key = SubElement(timelines[element_name], "key", id=str(frame_len), time=str(frame_len * frame_duration), spin=str(last["spin"]))
-                            SubElement(end_key, "object", folder=scml.find(f"folder[@name='{_element_name}']").get("id"), file=str(element["frame"]), x=str(trans[0]), y=str(-trans[1]), scale_x=str(last["scale_x"]), scale_y=str(last["scale_y"]), angle=str(angle))
-                            SubElement(end_mainlinee_key, "object_ref", id=str(element_idx), timeline=timelines[element_name].get("id"), key=str(frame_len), z_index=str(len(frame["elements"]) - 1 - element_idx), layername=element["layername"])
     def save_bin(self, output: str|ZipFile, name=None):
         if not self.content:
             self.json_to_bin()
