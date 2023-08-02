@@ -77,7 +77,15 @@ class Scml(ElementTree):
             files = [file for file in folder.findall("file") if file.get("name").find("(missing)") == -1]
             if files:
                 build_data["Symbol"][folder_name] = []
+
+            jump_frame = []
             for file in files:
+                if (framenum := int(file.get("id", "0"))) in jump_frame:
+                    continue
+
+                for i in range(1, duration):
+                    jump_frame.append(framenum + i)
+
                 if (match := re.search(r"(duration\'(.+?)\')", file.get("name"))) is not None:
                     duration = int(re.findall(r'\d+', match.group(1))[0])
                     for frame in build_data["Symbol"][folder_name]:
@@ -87,12 +95,13 @@ class Scml(ElementTree):
                     continue
 
                 w, h = int(file.get("width")), int(file.get("height"))
-                framenum = int(file.get("id", "0"))
+                duration = int(file.get("duration", 1))
 
                 x = w / 2 - float(file.get("pivot_x", "0")) * w
                 y = h / 2 - float(file.get("pivot_y", "0")) * h
                 y = -y
-                build_data["Symbol"][folder_name].append({"framenum": framenum, "duration": 1, "x": x, "y": y, "w": w, "h": h})
+
+                build_data["Symbol"][folder_name].append({"framenum": framenum, "duration": duration, "x": x, "y": y, "w": w, "h": h})
                 symbols_images[f"{folder_name}-{framenum}"] = os.path.join(build_path, file.get("name"))
 
         return build_data, symbols_images
