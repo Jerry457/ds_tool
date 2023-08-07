@@ -83,6 +83,7 @@ class Scml(ElementTree):
                 if (framenum := int(file.get("id", "0"))) in jump_frame:
                     continue
 
+                duration = int(file.get("duration", 1))
                 for i in range(1, duration):
                     jump_frame.append(framenum + i)
 
@@ -95,7 +96,6 @@ class Scml(ElementTree):
                     continue
 
                 w, h = int(file.get("width")), int(file.get("height"))
-                duration = int(file.get("duration", 1))
 
                 x = w / 2 - float(file.get("pivot_x", "0")) * w
                 y = h / 2 - float(file.get("pivot_y", "0")) * h
@@ -183,7 +183,6 @@ class Scml(ElementTree):
                     frame_w, frame_h = right - left, down - up
                     frame_x = frame_w / 2 - (frame_pivot_x - left)
                     frame_y = frame_h / 2 - (frame_pivot_y - up)
-                    frame_y = -frame_y
                     Frame["x"], Frame["y"], Frame["w"], Frame["h"] = frame_x, frame_y, frame_w, frame_h
 
                     anim_data["banks"][entity_name][animation_name]["frames"].append(Frame)
