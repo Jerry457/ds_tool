@@ -90,8 +90,8 @@ def reverse_trans_rot_scale_pivot_matrix(matrix: Matrix3, last, first) -> tuple:
     if math.fabs(scale_x) < eps or math.fabs(scale_y) < eps:
         angle = last["angle"]
     else:
-        sin_approx = 0.5 * (m[0][1] / scale_y - m[1][0] / scale_x)
-        cos_approx = 0.5 * (m[0][0] / scale_x + m[1][1] / scale_y)
+        sin_approx = m[0][1] / scale_y
+        cos_approx = m[1][1] / scale_y
         angle = math.atan2(sin_approx, cos_approx)
 
     spin = (1 if math.fabs(angle - last["angle"]) <= math.pi else -1) * (-1 if angle < last["angle"] else 1)

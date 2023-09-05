@@ -121,8 +121,8 @@ class AnimBuild():
             for frame in self.data["Symbol"][symbol_name]:
                 frame_name = f'{symbol_name}-{frame["framenum"]}'
 
-                x_offset = frame["x"] - frame["w"] / 2
-                y_offset = frame["y"] - frame["h"] / 2
+                x_offset = frame["x"] - frame["w"] // 2
+                y_offset = frame["y"] - frame["h"] // 2
 
                 frame["alphaidx"] = len(self.data["Vert"])
                 frame["alphacount"] = 0
@@ -192,7 +192,7 @@ class AnimBuild():
                 image_name = f"{symbol_name}-{frame['framenum']}"
 
                 verts = self.data["Vert"][frame["alphaidx"]: frame["alphaidx"] + frame["alphacount"]]
-                x_offset, y_offset = frame["x"] - (w := frame["w"]) / 2, frame["y"] - (h := frame["h"]) / 2
+                x_offset, y_offset = frame["x"] - (w := frame["w"]) // 2, frame["y"] - (h := frame["h"]) // 2
 
                 if len(verts) == 0 or max(u_list := [vert["u"] for vert in verts] or [0]) == min(u_list):
                     self.symbol_images[image_name] = Image.new("RGBA", (w, h))
@@ -351,7 +351,7 @@ class AnimBuild():
                             folders[element_name] = {}
 
                         if element["frame"] not in folders[element_name]:
-                            folders[element_name][element["frame"]] = {"framenum": element["frame"], "duration": 1, "x": 0, "y": 0, "w": int(frame["w"]), "h": int(frame["h"])}
+                            folders[element_name][element["frame"]] = {"framenum": element["frame"], "duration": 1, "x": 0, "y": 0, "w": int(max(frame["w"], 1)), "h": int(max(frame["w"], 1))}
 
         for folder_idx, (folder_name, symbol) in enumerate(folders.items()):
             folder = SubElement(scml, "folder", id=str(folder_idx), name=folder_name)
