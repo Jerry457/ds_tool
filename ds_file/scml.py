@@ -183,12 +183,13 @@ class Scml(ElementTree):
                     frame_w, frame_h = right - left, down - up
                     frame_x = frame_w / 2 - (frame_pivot_x - left)
                     frame_y = frame_h / 2 - (frame_pivot_y - up)
+                    frame_y = -frame_y
                     Frame["x"], Frame["y"], Frame["w"], Frame["h"] = frame_x, frame_y, frame_w, frame_h
 
                     anim_data["banks"][entity_name][animation_name]["frames"].append(Frame)
                     anim_data["banks"][entity_name][animation_name]["numframes"] = len(Frame)
 
         from ds_file.anim import DSAnim
-        with DSAnim() as anim:
+        with DSAnim(anim_data) as anim:
             anim.parse_file(build_data, symbols_images)
             anim.save_bin(output)
