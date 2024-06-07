@@ -35,3 +35,4 @@
     (6) 文件夹里有拆包得到的json文件和图片, 自动打包(可修改build里的scale来修改打包时的缩放)  
 
 弃用,转到: [https://github.com/Jerry457?tab=repositories](https://github.com/Jerry457/dont-starve-anim-tool)https://github.com/Jerry457/dont-starve-anim-tool
+https://dont-starve-anim-tool-spine.vercel.app/
